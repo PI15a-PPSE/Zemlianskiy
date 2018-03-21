@@ -8,6 +8,7 @@ function PlayingArea()
     this.width = this.element.width();
     this.height = this.element.height();
     
+    this.platform = new Platform(this);
     
     this.initBricks = function() // функция заполнения площадки блоками
     {
@@ -17,8 +18,18 @@ function PlayingArea()
                     +(i * heightBricks + 1)+"; width:"+(widthBricks - 2)+"px; height: "+(heightBricks - 2)+"px'><p>"
                         + (Math.round(Math.random() * (countBricksLines - i)) + (countBricksLines - i)) + "</p></div>");
     }
+    
 }
 
+
+function Platform(pa)
+{
+    this.pa = pa;
+    this.element = $("#platform"); 
+    this.width = this.element.width();
+    this.height = this.element.height();
+    this.interval = 0;
+}
 
 //Параметры кирпичей
 const countBricksLine=10;

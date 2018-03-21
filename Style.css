@@ -1,12 +1,12 @@
 #playing-area 
 {
     position : absolute;
-    left : 10%; 
+    left : 13%; 
     top : 10%; 
     background-color : rgb(200,200,256);
     box-shadow: 0px 0px 20px #000;
     z-index:0;
-}
+}
 
 .brick 
 {
@@ -27,4 +27,19 @@
     text-align : center; 
     text-shadow: #fff 1px 1px 2px;
 }
+
+#platform
+{
+    position : absolute;
+    left : 50%; top : 100%; width : 150px; height : 20px;
+    margin-left : -75px;
+    margin-top : -20px;
+    border : none;
+    border-radius: 2px;
+    background-color : rgb(100,150,256);
+    box-shadow: inset 0px 0px 10px #333;
+    z-index:1;
+}
+
+
 
