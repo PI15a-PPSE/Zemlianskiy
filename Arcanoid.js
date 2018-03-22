@@ -1,5 +1,4 @@
-function PlayingArea()
-{
+function PlayingArea() {
 
     this.element = $("#playing-area");
     this.element.width(countBricksLine*widthBricks);
@@ -9,9 +8,9 @@ function PlayingArea()
     this.height = this.element.height();
     
     this.platform = new Platform(this);
+    this.ball = new ball(this);
     
-    this.initBricks = function() // функция заполнения площадки блоками
-    {
+    this.initBricks = function(){ // функция заполнения площадки блоками
         for (var i = 0; i < countBricksLines; i++)
             for (var j = 0; j < countBricksLine; j++)
                 this.element.prepend("<div id='brick_"+i+"_"+j+"' class='brick' style='left:"+(j * widthBricks + 1)+"px; top:"
@@ -22,13 +21,24 @@ function PlayingArea()
 }
 
 
-function Platform(pa)
-{
+function Platform(pa) {
     this.pa = pa;
     this.element = $("#platform"); 
     this.width = this.element.width();
     this.height = this.element.height();
     this.interval = 0;
+    
+}
+
+function ball(pa) {
+     this.pa = pa;
+     this.element = $("#ball");
+     this.width = this.element.width();
+     this.height = this.element.height();
+     this.dx = 0;
+     this.dy = 0;
+     this.element.offset({top:this.pa.platform.element.offset().top - this.height, 
+        left:this.pa.platform.element.offset().left + this.pa.platform.width / 2 - this.width / 2}); 
 }
 
 //Параметры кирпичей
@@ -39,8 +49,7 @@ const heightBricks=30;
 
 var pa; // игровая площадка
 
-$(document).ready(function() 
-{
+$(document).ready(function() {
     pa = new PlayingArea();
     pa.initBricks();
 })

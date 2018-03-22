@@ -1,5 +1,4 @@
-#playing-area 
-{
+#playing-area {
     position : absolute;
     left : 13%; 
     top : 10%; 
@@ -8,8 +7,7 @@
     z-index:0;
 }
 
-.brick 
-{
+.brick {
     position : absolute;
     border : none;
     background-color : rgb(100,150,256);
@@ -18,8 +16,7 @@
     z-index:1;
 }
 
-.brick p 
-{
+.brick p {
     margin : 2;
     font-size : 14px;
     font-weight : bold;
@@ -28,8 +25,7 @@
     text-shadow: #fff 1px 1px 2px;
 }
 
-#platform
-{
+#platform {
     position : absolute;
     left : 50%; top : 100%; width : 150px; height : 20px;
     margin-left : -75px;
@@ -41,5 +37,13 @@
     z-index:1;
 }
 
+ #ball {
+    position : absolute;
+    width : 20px; height : 20px;
+    background-color : rgb(100,150,256);
+    border-radius: 10px;  
+    box-shadow: inset 0px 0px 10px #333;
+    z-index:1;
+}
 
 
