@@ -27,17 +27,32 @@ function Platform(pa) {
     this.width = this.element.width();
     this.height = this.element.height();
     this.interval = 0;
+    // функция перемещения платформы
+    this.move = function(x) { 
+        var mleft = x - this.width / 2; 
+        var leftMin = this.pa.offset.left;   
+        var leftMax = this.pa.offset.left + this.pa.width - this.width;   
+
+        if (mleft < leftMin){
+            mleft = leftMin;
+        }
+
+        if (mleft > leftMax){
+            mleft = leftMax;
+        }
+        this.element.offset({left:mleft});
+    }
     
 }
 
 function ball(pa) {
-     this.pa = pa;
-     this.element = $("#ball");
-     this.width = this.element.width();
-     this.height = this.element.height();
-     this.dx = 0;
-     this.dy = 0;
-     this.element.offset({top:this.pa.platform.element.offset().top - this.height, 
+    this.pa = pa;
+    this.element = $("#ball");
+    this.width = this.element.width();
+    this.height = this.element.height();
+    this.dx = 0;
+    this.dy = 0;
+    this.element.offset({top:this.pa.platform.element.offset().top - this.height, 
         left:this.pa.platform.element.offset().left + this.pa.platform.width / 2 - this.width / 2}); 
 }
 
@@ -52,4 +67,8 @@ var pa; // игровая площадка
 $(document).ready(function() {
     pa = new PlayingArea();
     pa.initBricks();
+    $(document).mousemove(function(event) {      
+        event = event || window.event;
+        pa.platform.move(event.pageX || event.x);
+    })
 })
