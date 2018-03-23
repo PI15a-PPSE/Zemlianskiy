@@ -8,14 +8,16 @@ function PlayingArea() {
     this.height = this.element.height();
     
     this.platform = new Platform(this);
-    this.ball = new ball(this);
+    this.ball = new Ball(this);
     
     this.initBricks = function(){ // функция заполнения площадки блоками
-        for (var i = 0; i < countBricksLines; i++)
-            for (var j = 0; j < countBricksLine; j++)
+        for (var i = 0; i < countBricksLines; i++){
+            for (var j = 0; j < countBricksLine; j++) {
                 this.element.prepend("<div id='brick_"+i+"_"+j+"' class='brick' style='left:"+(j * widthBricks + 1)+"px; top:"
                     +(i * heightBricks + 1)+"; width:"+(widthBricks - 2)+"px; height: "+(heightBricks - 2)+"px'><p>"
                         + (Math.round(Math.random() * (countBricksLines - i)) + (countBricksLines - i)) + "</p></div>");
+            }
+        }
     }
     
 }
@@ -44,12 +46,16 @@ function Platform(pa) {
             mleft = leftMax;
         }
         this.element.offset({left:mleft});
+        if(this.pa.ball.dy==0){
+            this.pa.ball.element.offset({left:mleft+this.width/2 - this.pa.ball.width/2});
+        }
     }
     
 }
 
-function ball(pa) {
+function Ball(pa) {
     this.pa = pa;
+    console.log(this);
     this.element = $("#ball");
     this.width = this.element.width();
     this.height = this.element.height();
@@ -87,14 +93,18 @@ $(document).ready(function() {
     pa = new PlayingArea();
     pa.initBricks();
     pa.ball.setDef();
+
     $(document).mousemove(function(event) {      
         event = event || window.event;
         pa.platform.move(event.pageX || event.x);
     })
+    
     $(document).mousedown(function(event){
+        
         if (pa.ball.dy!=0)
             return;
         pa.ball.start();
         pa.ball.interval = window.setInterval(function() {pa.ball.move()}, 10); 
     })
+    
 })
