@@ -77,6 +77,12 @@ function Ball(pa) {
     
     this.move = function() {
         var ballOffset= this.element.offset();
+        if(this.element.offset().left+this.dx < this.pa.element.offset().left || this.element.offset().left+this.dx > this.pa.element.offset().left + this.pa.width) {
+            this.dx = -this.dx;
+        }
+        if(this.element.offset().top + this.dy < this.pa.element.offset().top){
+            this.dy = -this.dy;
+        }        
         this.element.offset({top:ballOffset.top+this.dy,left:ballOffset.left+this.dx});
     }
 }
