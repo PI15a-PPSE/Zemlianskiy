@@ -27,6 +27,9 @@ function Platform(pa) {
     this.width = this.element.width();
     this.height = this.element.height();
     this.interval = 0;
+    this.top=this.element.offset().top;
+    this.left=this.element.offset().left;
+    
     // функция перемещения платформы
     this.move = function(x) { 
         var mleft = x - this.width / 2; 
@@ -52,8 +55,24 @@ function ball(pa) {
     this.height = this.element.height();
     this.dx = 0;
     this.dy = 0;
-    this.element.offset({top:this.pa.platform.element.offset().top - this.height, 
-        left:this.pa.platform.element.offset().left + this.pa.platform.width / 2 - this.width / 2}); 
+    
+    this.setDef = function(){
+        this.element.offset({top:this.pa.platform.top - this.height, 
+        left:this.pa.platform.left + this.pa.platform.width / 2 - this.width / 2});
+    }
+    
+     
+        
+    this.start = function() {
+        this.dx = 2 - Math.round(Math.random() * 5);
+        this.dy = -5;
+        
+    }
+    
+    this.move = function() {
+        var ballOffset= this.element.offset();
+        this.element.offset({top:ballOffset.top+this.dy,left:ballOffset.left+this.dx});
+    }
 }
 
 //Параметры кирпичей
@@ -67,8 +86,15 @@ var pa; // игровая площадка
 $(document).ready(function() {
     pa = new PlayingArea();
     pa.initBricks();
+    pa.ball.setDef();
     $(document).mousemove(function(event) {      
         event = event || window.event;
         pa.platform.move(event.pageX || event.x);
+    })
+    $(document).mousedown(function(event){
+        if (pa.ball.dy!=0)
+            return;
+        pa.ball.start();
+        pa.ball.interval = window.setInterval(function() {pa.ball.move()}, 10); 
     })
 })
