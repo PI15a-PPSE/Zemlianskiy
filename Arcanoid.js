@@ -77,12 +77,22 @@ function Ball(pa) {
     
     this.move = function() {
         var ballOffset= this.element.offset();
-        if(this.element.offset().left+this.dx < this.pa.element.offset().left || this.element.offset().left+this.dx > this.pa.element.offset().left + this.pa.width) {
+        // отбивание шарика от боковых стенок площадки        
+        if(this.element.offset().left+this.dx < this.pa.element.offset().left || 
+            this.element.offset().left+this.dx > this.pa.element.offset().left + this.pa.width - 20) {
             this.dx = -this.dx;
         }
+        // отбивание шарика от верхней стени площадки
         if(this.element.offset().top + this.dy < this.pa.element.offset().top){
             this.dy = -this.dy;
-        }        
+        }
+        // отбивание шарика от платформы
+        if(this.element.offset().top + this.dy > this.pa.platform.element.offset().top - 20 &&
+            this.element.offset().left+this.dx > this.pa.platform.element.offset().left && 
+                this.element.offset().left+this.dx < this.pa.platform.element.offset().left + this.pa.platform.width){
+            this.dy = -this.dy;
+        }
+
         this.element.offset({top:ballOffset.top+this.dy,left:ballOffset.left+this.dx});
     }
 }
