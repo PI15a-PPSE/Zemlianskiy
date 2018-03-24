@@ -8,7 +8,7 @@ function PlayingArea() {
     this.height = this.element.height();
     
     this.platform = new Platform(this);
-    this.ball = new ball(this);
+    this.ball = new Ball(this);
     
     this.initBricks = function(){ // функция заполнения площадки блоками
         for (var i = 0; i < countBricksLines; i++) {
@@ -29,18 +29,72 @@ function Platform(pa) {
     this.width = this.element.width();
     this.height = this.element.height();
     this.interval = 0;
+    this.top=this.element.offset().top;
+    this.left=this.element.offset().left;
+    
+    // функция перемещения платформы
+    this.move = function(x) { 
+        var mleft = x - this.width / 2; 
+        var leftMin = this.pa.offset.left;   
+        var leftMax = this.pa.offset.left + this.pa.width - this.width;   
+
+        if (mleft < leftMin){
+            mleft = leftMin;
+        }
+
+        if (mleft > leftMax){
+            mleft = leftMax;
+        }
+        this.element.offset({left:mleft});
+        if(this.pa.ball.dy==0){
+            this.pa.ball.element.offset({left:mleft+this.width/2 - this.pa.ball.width/2});
+        }
+    }
     
 }
 
-function ball(pa) {
-     this.pa = pa;
-     this.element = $("#ball");
-     this.width = this.element.width();
-     this.height = this.element.height();
-     this.dx = 0;
-     this.dy = 0;
-     this.element.offset({top:this.pa.platform.element.offset().top - this.height, 
-        left:this.pa.platform.element.offset().left + this.pa.platform.width / 2 - this.width / 2}); 
+function Ball(pa) {
+    this.pa = pa;
+    console.log(this);
+    this.element = $("#ball");
+    this.width = this.element.width();
+    this.height = this.element.height();
+    this.dx = 0;
+    this.dy = 0;
+    
+    this.setDef = function(){
+        this.element.offset({top:this.pa.platform.top - this.height, 
+        left:this.pa.platform.left + this.pa.platform.width / 2 - this.width / 2});
+    }
+    
+     
+        
+    this.start = function() {
+        this.dx = 2 - Math.round(Math.random() * 5);
+        this.dy = -5;
+        
+    }
+    
+    this.move = function() {
+        var ballOffset= this.element.offset();
+        // отбивание шарика от боковых стенок площадки        
+        if(this.element.offset().left+this.dx < this.pa.element.offset().left || 
+            this.element.offset().left+this.dx > this.pa.element.offset().left + this.pa.width - 20) {
+            this.dx = -this.dx;
+        }
+        // отбивание шарика от верхней стени площадки
+        if(this.element.offset().top + this.dy < this.pa.element.offset().top){
+            this.dy = -this.dy;
+        }
+        // отбивание шарика от платформы
+        if(this.element.offset().top + this.dy > this.pa.platform.element.offset().top - 20 &&
+            this.element.offset().left+this.dx > this.pa.platform.element.offset().left && 
+                this.element.offset().left+this.dx < this.pa.platform.element.offset().left + this.pa.platform.width){
+            this.dy = -this.dy;
+        }
+
+        this.element.offset({top:ballOffset.top+this.dy,left:ballOffset.left+this.dx});
+    }
 }
 
 //Параметры кирпичей
@@ -54,4 +108,19 @@ var pa; // игровая площадка
 $(document).ready(function() {
     pa = new PlayingArea();
     pa.initBricks();
+    pa.ball.setDef();
+
+    $(document).mousemove(function(event) {      
+        event = event || window.event;
+        pa.platform.move(event.pageX || event.x);
+    })
+    
+    $(document).mousedown(function(event){
+        
+        if (pa.ball.dy!=0)
+            return;
+        pa.ball.start();
+        pa.ball.interval = window.setInterval(function() {pa.ball.move()}, 10); 
+    })
+    
 })
