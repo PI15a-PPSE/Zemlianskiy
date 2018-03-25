@@ -61,10 +61,11 @@ function Ball(pa) {
     this.height = this.element.height();
     this.dx = 0;
     this.dy = 0;
+    this.interval = 0;
     
     this.setDef = function(){
-        this.element.offset({top:this.pa.platform.top - this.height, 
-        left:this.pa.platform.left + this.pa.platform.width / 2 - this.width / 2});
+        this.element.offset({top:this.pa.platform.element.offset().top - this.height, 
+        left:this.pa.platform.element.offset().left + this.pa.platform.width / 2 - this.width / 2});
     }
     
      
@@ -92,8 +93,27 @@ function Ball(pa) {
                 this.element.offset().left+this.dx < this.pa.platform.element.offset().left + this.pa.platform.width){
             this.dy = -this.dy;
         }
-
+        
+        // падение шарика
+        if(this.element.offset().top + this.dy > this.pa.platform.element.offset().top - 20 &&
+            (this.element.offset().left+this.dx < this.pa.platform.element.offset().left || 
+            this.element.offset().left+this.dx > this.pa.platform.element.offset().left + this.pa.platform.width)){
+                this.reset();
+                return;
+        }
+        console.log(this.dy);        
         this.element.offset({top:ballOffset.top+this.dy,left:ballOffset.left+this.dx});
+    }
+    
+    this.reset = function()
+    {
+        this.dx = 0;
+        this.dy = 0;
+        this.setDef();
+        if (this.interval){
+            clearInterval(this.interval);
+        }
+
     }
 }
 
