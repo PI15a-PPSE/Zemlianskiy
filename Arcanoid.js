@@ -7,6 +7,8 @@ function PlayingArea() {
     this.width = this.element.width();
     this.height = this.element.height();
     
+    this.score=0;
+    
     this.platform = new Platform(this);
     this.ball = new Ball(this);
     
@@ -18,6 +20,10 @@ function PlayingArea() {
                         + (Math.round(Math.random() * (countBricksLines - i)) + (countBricksLines - i)) + "</p></div>");
             }
         }
+    }
+    
+    this.showInfo = function(){
+        $('#info').html("Очки:" + this.score);
     }
     
 }
@@ -99,6 +105,9 @@ function Ball(pa) {
             (this.element.offset().left+this.dx < this.pa.platform.element.offset().left || 
             this.element.offset().left+this.dx > this.pa.platform.element.offset().left + this.pa.platform.width)){
                 this.reset();
+                alert("Игра окончена. Ваши очки: " + this.pa.score);
+                this.pa.score=0;
+                this.pa.showInfo();
                 return;
         }
         console.log(this.dy);        
@@ -129,6 +138,7 @@ $(document).ready(function() {
     pa = new PlayingArea();
     pa.initBricks();
     pa.ball.setDef();
+    pa.showInfo();
 
     $(document).mousemove(function(event) {      
         event = event || window.event;
