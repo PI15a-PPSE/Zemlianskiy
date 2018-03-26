@@ -23,7 +23,7 @@ function PlayingArea() {
     }
     
     this.showInfo = function(){
-        $('#info').html("Очки:" + this.score);
+        $('#info').html("Очки: " + this.score);
     }
     
 }
@@ -37,6 +37,9 @@ function Platform(pa) {
     this.interval = 0;
     this.top=this.element.offset().top;
     this.left=this.element.offset().left;
+    
+    this.dx = 0;
+    this.lastX = this.element.offset().left;
     
     // функция перемещения платформы
     this.move = function(x) { 
@@ -52,16 +55,23 @@ function Platform(pa) {
             mleft = leftMax;
         }
         this.element.offset({left:mleft});
-        if(this.pa.ball.dy==0){
+        if (this.pa.ball.dy==0){
             this.pa.ball.element.offset({left:mleft+this.width/2 - this.pa.ball.width/2});
         }
+    }
+    
+    this.evaluateDx = function(){
+        if (this.lastX > 0){
+            this.dx =this.element.offset().left - this.lastX;
+        }
+        this.lastX =this.element.offset().left;
+
     }
     
 }
 
 function Ball(pa) {
     this.pa = pa;
-    console.log(this);
     this.element = $("#ball");
     this.width = this.element.width();
     this.height = this.element.height();
@@ -98,6 +108,17 @@ function Ball(pa) {
             this.element.offset().left+this.dx > this.pa.platform.element.offset().left && 
                 this.element.offset().left+this.dx < this.pa.platform.element.offset().left + this.pa.platform.width){
             this.dy = -this.dy;
+            this.dx = this.dx + Math.round(this.pa.platform.dx / 3);
+            if (Math.abs(this.dx) > maxBallDx) {
+                console.log(this.dx);
+                if(this.dx < 0) {
+                    this.dx = -maxBallDx;
+                }
+                else {
+                    this.dx = maxBallDx;
+                }
+                console.log(this.dx);
+            }                
         }
         
         // падение шарика
@@ -105,12 +126,8 @@ function Ball(pa) {
             (this.element.offset().left+this.dx < this.pa.platform.element.offset().left || 
             this.element.offset().left+this.dx > this.pa.platform.element.offset().left + this.pa.platform.width)){
                 this.reset();
-                alert("Игра окончена. Ваши очки: " + this.pa.score);
-                this.pa.score=0;
-                this.pa.showInfo();
                 return;
-        }
-        console.log(this.dy);        
+        }      
         this.element.offset({top:ballOffset.top+this.dy,left:ballOffset.left+this.dx});
     }
     
@@ -122,6 +139,9 @@ function Ball(pa) {
         if (this.interval){
             clearInterval(this.interval);
         }
+        alert("Игра окончена. Ваши очки: " + this.pa.score);
+        this.pa.score=0;
+        this.pa.showInfo();
 
     }
 }
@@ -132,6 +152,8 @@ const countBricksLines=10;
 const widthBricks=100;
 const heightBricks=30;
 
+const maxBallDx = 5;
+
 var pa; // игровая площадка
 
 $(document).ready(function() {
@@ -139,6 +161,7 @@ $(document).ready(function() {
     pa.initBricks();
     pa.ball.setDef();
     pa.showInfo();
+    pa.platform.interval = window.setInterval(function() {pa.platform.evaluateDx()}, 10);
 
     $(document).mousemove(function(event) {      
         event = event || window.event;
