@@ -34,8 +34,6 @@ function PlayingArea() {
         this.score=0;
         this.showInfo();
     } 
-
-    
 }
 
 
@@ -166,7 +164,7 @@ function Ball(pa) {
             }
             var brickScore = parseInt(brickText);
             this.pa.score = this.pa.score + brickScore;
-            console.log(this.pa.score);
+            this.pa.showInfo();
         }
         
         this.element.offset({top:ballOffset.top+this.dy,left:ballOffset.left+this.dx});
@@ -182,7 +180,6 @@ function Ball(pa) {
         }
         alert("Игра окончена. Ваши очки: " + this.pa.score);
         this.pa.refreshArea();
-
     }
 }
 
