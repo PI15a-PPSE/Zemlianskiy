@@ -14,7 +14,7 @@ function PlayingArea() {
     
     this.score = 0;
     
-    this.initBricks = function(){ // функция заполнения площадки блоками
+    this.initBricks = function() { // функция заполнения площадки блоками
         for (var i = 0; i < countBricksLines; i++) {
             for (var j = 0; j < countBricksLine; j++) {
                 this.element.prepend("<div id='brick_"+i+"_"+j+"' class='brick' style='left:"+(j * widthBricks + 1)+"px; top:"
@@ -24,9 +24,17 @@ function PlayingArea() {
         }
     }
     
-    this.showInfo = function(){
+    this.showInfo = function() {
         $('#info').html("Очки: " + this.score);
     }
+    
+    this.refreshArea = function() {
+        $('.brick').remove();
+        this.initBricks();
+        this.score=0;
+        this.showInfo();
+    } 
+
     
 }
 
@@ -89,8 +97,8 @@ function Ball(pa) {
      
         
     this.start = function() {
-        this.dx = 2 - Math.round(Math.random() * 5);
-        this.dy = -5;
+        this.dx = 1 - Math.round(Math.random() * 3);
+        this.dy = -3;
         
     }
     
@@ -173,8 +181,7 @@ function Ball(pa) {
             clearInterval(this.interval);
         }
         alert("Игра окончена. Ваши очки: " + this.pa.score);
-        this.pa.score=0;
-        this.pa.showInfo();
+        this.pa.refreshArea();
 
     }
 }
@@ -185,16 +192,16 @@ const countBricksLines=10;
 const widthBricks=100;
 const heightBricks=30;
 
-const maxBallDx = 5;
+const maxBallDx = 3;
 
 var pa; // игровая площадка
 
 $(document).ready(function() {
     pa = new PlayingArea();
-    pa.initBricks();
+    pa.refreshArea();
     pa.ball.setDef();
     pa.showInfo();
-    pa.platform.interval = window.setInterval(function() {pa.platform.evaluateDx()}, 10);
+    pa.platform.interval = window.setInterval(function() {pa.platform.evaluateDx()}, 5);
 
     $(document).mousemove(function(event) {      
         event = event || window.event;
@@ -206,7 +213,7 @@ $(document).ready(function() {
         if (pa.ball.dy!=0)
             return;
         pa.ball.start();
-        pa.ball.interval = window.setInterval(function() {pa.ball.move()}, 10); 
+        pa.ball.interval = window.setInterval(function() {pa.ball.move()}, 5); 
     })
     
 })
