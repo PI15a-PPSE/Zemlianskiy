@@ -93,6 +93,8 @@ function Ball(pa) {
             this.dy = -this.dy;
         }
         
+        // отбивание шарика от кирпичей
+        
         var ballNextX = this.element.offset().left + this.dx;
         var ballNextY = this.element.offset().top +this.dy;
         
@@ -101,7 +103,16 @@ function Ball(pa) {
         
         var brick = document.getElementById("brick_" + brickIndexY + "_" + brickIndexX);
         if (brick != null) {
-            console.log("brick_" + brickIndexY + "_" + brickIndexX);
+            var rect = brick.getBoundingClientRect();
+            if (this.element.offset().left > rect.left - this.width &&
+                this.element.offset().left < rect.left + rect.width) {
+                    this.dy = -this.dy;
+            }
+            else{
+                this.dx = -this.dx;
+            }
+            $("#"+brick.id).hide(100, function(){$("#"+this.id).remove()});
+            
         }
         
 
