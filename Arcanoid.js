@@ -10,6 +10,8 @@ function PlayingArea() {
     this.platform = new Platform(this);
     this.ball = new Ball(this);
     
+    this.score = 0;
+    
     this.initBricks = function(){ // функция заполнения площадки блоками
         for (var i = 0; i < countBricksLines; i++) {
             for (var j = 0; j < countBricksLine; j++) {
@@ -108,11 +110,20 @@ function Ball(pa) {
                 this.element.offset().left < rect.left + rect.width) {
                     this.dy = -this.dy;
             }
-            else{
+            else {
                 this.dx = -this.dx;
             }
             $("#"+brick.id).hide(100, function(){$("#"+this.id).remove()});
-            
+            var brickText;
+            if ( brick.innerText) {
+                brickText = brick.innerText;
+            }
+            else {
+                brickText = brick.textContent;
+            }
+            var brickScore = parseInt(brickText);
+            this.pa.score = this.pa.score + brickScore;
+            console.log(this.pa.score);
         }
         
 
