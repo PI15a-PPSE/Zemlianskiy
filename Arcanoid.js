@@ -28,6 +28,11 @@ function PlayingArea() {
         $('#info').html("Очки: " + this.score);
     }
     
+    this.refreshArea = function() {
+        $('.brick').remove();
+        this.initBricks();
+    }
+    
 }
 
 
@@ -158,7 +163,7 @@ function Ball(pa) {
             }
             var brickScore = parseInt(brickText);
             this.pa.score = this.pa.score + brickScore;
-            console.log(this.pa.score);
+            this.pa.showInfo();
         }
         
         this.element.offset({top:ballOffset.top+this.dy,left:ballOffset.left+this.dx});
@@ -173,9 +178,10 @@ function Ball(pa) {
             clearInterval(this.interval);
         }
         alert("Игра окончена. Ваши очки: " + this.pa.score);
+        this.pa.refreshArea();
         this.pa.score=0;
         this.pa.showInfo();
-
+        
     }
 }
 
