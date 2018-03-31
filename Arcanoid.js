@@ -92,6 +92,18 @@ function Ball(pa) {
                 this.element.offset().left+this.dx < this.pa.platform.element.offset().left + this.pa.platform.width){
             this.dy = -this.dy;
         }
+        
+        var ballNextX = this.element.offset().left + this.dx;
+        var ballNextY = this.element.offset().top +this.dy;
+        
+        var brickIndexX = Math.floor((ballNextX - this.pa.offset.left)/widthBricks);
+        var brickIndexY = Math.floor((ballNextY - this.pa.offset.top)/heightBricks);
+        
+        var brick = document.getElementById("brick_" + brickIndexY + "_" + brickIndexX);
+        if (brick != null) {
+            console.log("brick_" + brickIndexY + "_" + brickIndexX);
+        }
+        
 
         this.element.offset({top:ballOffset.top+this.dy,left:ballOffset.left+this.dx});
     }
