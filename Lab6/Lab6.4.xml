@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- This document was created with Syntext Serna Free. --><!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "docbookV4.5/docbookx.dtd" []>
+<book>
+  <bookinfo>
+    <title>Арканоид</title>
+    <author>
+      <personname>
+        <firstname>Дмитрий</firstname>
+        <surname> Землянский</surname>
+      </personname>
+    </author>
+    <copyright>
+      <year>2018</year>
+      <holder>Землянский Дмитрий</holder>
+    </copyright>
+  </bookinfo>
+  <preface>
+    <title>Преамбула</title>
+    <para>Данный программный продукт разработан в рамках курса &quot;Профессиональный практикум 
+программной инженерии&quot; в учебных целях.</para>
+  </preface>
+  <chapter>
+    <title>Описание программного продукта</title>
+    <para>Данное приложение является игровым приложением Арканоид.</para>
+    <para>Суть игры заключается в том что бы набрать как можно больше очков уничтожая кирпичи с шариком не уронив его при этом.</para>
+    <para>Шарик начинает свое движение в произвольном направлении с центра платформы.</para>
+    <para>При движении шарика возможны следующие ситуации:</para>
+    <itemizedlist>
+      <listitem>
+        <para>Встреча с боковыми и верхней стенками игровой области. В этом случае шарик отскакивает от них.</para>
+      </listitem>
+      <listitem>
+        <para>Отбивание шарика от платформы. В этом случае если платформа не движется шарик отскакивает под тем же углом что и упал, если же платформа находится в движении шарик может поменять угол отскока от платформы в зависимоти от направления движения платформы. Чем больший угол движения шарика тем больше скорость до определенного предела. Наименьшая скорость движения шарика в случае движения шарика в в вертикальном направлении.</para>
+      </listitem>
+      <listitem>
+        <para>Встреча шарика с кирпичем. В этом случае шарик отскакивает как при столкновении от стенок, при этом кирпич уничтожается и игровой счет увеличивается на значение указаное внутри кирпича.</para>
+      </listitem>
+      <listitem>
+        <para>Падение шарика мимо платформы. В этом случае игроку выводится сообщеник с количеством очков набраных им и игра начинается заново.</para>
+      </listitem>
+    </itemizedlist>
+    <para>Количество очков набраных в течении игры показывается в течении всей игры слева от игровой области.</para>
+  </chapter>
+  <chapter>
+    <title>Сценарии</title>
+    <section>
+      <title>Инициализация игровой площадки</title>
+      <para>Для инициализации игровой площадки необходимо создать объект класса PlayingArea. После чего необходимо заполнить игровую площадку кирпичами c помощью метода PlayingArea.refreshArea(), а также установить шар на платформу с помощью функции класса Ball, обект которого находится в классе PlayingArea, Ball.setDef(). </para>
+      <example>
+        <title>Инициализация игровой площадки</title>
+        <programlisting>pa = new PlayingArea();
+pa.refreshArea();
+pa.ball.setDef();</programlisting>
+      </example>
+    </section>
+    <section>
+      <title>Запуск шара</title>
+      <para>Для запуска игры (начало движения шара) необходимо вызвать метод Ball.start() и назначить интервал для метода Ball.move() с помощью window.setInterval(function{})</para>
+      <example>
+        <title>Запуск шара</title>
+        <programlisting>pa = new PlayingArea();
+pa.ball.setDef();
+pa.ball.start();
+pa.ball.interval = window.setInterval(function() {pa.ball.move()}, 5); </programlisting>
+      </example>
+    </section>
+    <section>
+      <title>Перемещение платформы</title>
+      <para>Для перемещения платформы за указателем мыши необходимо привязать метод Platform.move() к движению мыши с помощью метода$(document).mousemove(function(event) {})</para>
+      <example>
+        <title>Перемещение платформы</title>
+        <programlisting>pa = new PlayingArea();
+$(document).mousemove(function(event) {      
+        event = event || window.event;
+        pa.platform.move(event.pageX || event.x);
+})</programlisting>
+      </example>
+    </section>
+  </chapter>
+</book>
