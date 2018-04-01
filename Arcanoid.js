@@ -422,8 +422,7 @@ function Ball(pa) {
     * @param    null    Не требует параметров
     * @return   void    Не возвращает значений
     */
-    this.reset = function()
-    {
+    this.reset = function() {
         this.dx = 0;
         this.dy = 0;
         this.setDef();
@@ -512,6 +511,5 @@ $(document).ready(function() {
             return;
         pa.ball.start();
         pa.ball.interval = window.setInterval(function() {pa.ball.move()}, 5); 
-    })
-    
+    })   
 })
